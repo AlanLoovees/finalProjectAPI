@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-pd4ob_6jrr_-=^vb(dhhkrow4(bzj!cwbmb$+@@1j5-q%ab+lo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['depression-recognizer.herokuapp.com']
 
 
 # Application definition
