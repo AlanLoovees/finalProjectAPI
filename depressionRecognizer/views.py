@@ -92,7 +92,7 @@ def username(request):
 
     avg, tally = training(tweetDetails)
 
-    res = {"name": name, "username":username, "profileImage": profileImageURL, "followees":tweetDetails['Followees'][0], "followers":tweetDetails['Followers'][0], "postCount":tweetDetails['No of posts'][0], "depLevel": avg, "tweets":tweetList}
+    res = {"name": name, "username":username, "profileImage": profileImageURL, "followees":tweetDetails['Followees'][0], "followers":tweetDetails['Followers'][0], "postCount":tweetDetails['No of posts'][0], "depLevel": avg, "tally": tally, "tweets":tweetList}
 
     return Response(res)
 
