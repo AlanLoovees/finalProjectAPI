@@ -33,17 +33,17 @@ vectorizer = CountVectorizer(tokenizer=lambda doc: doc, lowercase=False)
 tweetClassifier = MultinomialNB()
 activityClassifier = MultinomialNB()
 
-datasetReader = pd.read_csv(os.path.join(settings.BASE_DIR, 'cleanedDataset.csv'))
+datasetReader = pd.read_csv(os.path.join(settings.BASE_DIR, 'smallDataset.csv'))
 df = pd.DataFrame(datasetReader)
 
 tweetFeature = vectorizer.fit_transform(datasetReader.Tweet)
 
-X = np.asarray(df[['Followees', 'Followers', 'No of posts', 'Retweet count', 'Favorite count', 'Positive words', 'Negative words', 'No: of Words']])
+# X = np.asarray(df[['Followees', 'Followers', 'No of posts', 'Retweet count', 'Favorite count', 'Positive words', 'Negative words', 'No: of Words']])
 
-Y = np.asarray(df['Depressed'])
+# Y = np.asarray(df['Depressed'])
 
-tweetClassifier.fit(tweetFeature, datasetReader.Depressed)
-activityClassifier.fit(X, Y)
+tweetClassifier.fit(tweetFeature, datasetReader.Target)
+# activityClassifier.fit(X, Y)
 
 try:
     print("Classifiers ready!\n")
@@ -248,39 +248,39 @@ def training(tweetDetails):
     
     testTweetFeature = vectorizer.transform(tweetDetails['Tweet'])
 
-    Xt = np.asarray([tweetDetails['Followees'],tweetDetails['Followers'],tweetDetails['No of posts'],tweetDetails['Retweet count'],tweetDetails['Favorite count'],tweetDetails['Positive words'],tweetDetails['Negative words'],tweetDetails['No: of Words']])
+    # Xt = np.asarray([tweetDetails['Followees'],tweetDetails['Followers'],tweetDetails['No of posts'],tweetDetails['Retweet count'],tweetDetails['Favorite count'],tweetDetails['Positive words'],tweetDetails['Negative words'],tweetDetails['No: of Words']])
 
-    if(Xt.ndim == 1):
-        Xt = Xt.reshape(1,-1)
-    else:
-        Xt = Xt.transpose()
+    # if(Xt.ndim == 1):
+    #     Xt = Xt.reshape(1,-1)
+    # else:
+    #     Xt = Xt.transpose()
 
     prediction1 = tweetClassifier.predict_proba(testTweetFeature)
-    prediction2 = activityClassifier.predict_proba(Xt)
+    # prediction2 = activityClassifier.predict_proba(Xt)
 
-    pos = []
-    weight = 0.1
+    # pos = []
+    # weight = 0.01
 
     # Logarithmic addition for combining probabilities
-    for i in range(len(prediction2)):
-        res = [np.exp(np.log(prediction1[i][0]) + np.log(prediction2[i][0]+weight)),np.exp(np.log(prediction1[i][1]) + np.log(prediction2[i][1]+weight)),np.exp(np.log(prediction1[i][2]) + np.log(prediction2[i][2]+weight))]
-        pos.append(res)
+    # for i in range(len(prediction2)):
+    #     res = [np.exp(np.log(prediction1[i][0]) + np.log(prediction2[i][0]+weight)),np.exp(np.log(prediction1[i][1]) + np.log(prediction2[i][1]+weight)),np.exp(np.log(prediction1[i][2]) + np.log(prediction2[i][2]+weight))]
+    #     pos.append(res)
 
     tally = []
 
     # Adding the tally of resutls to a tally list
 
-    for i in pos:
+    for i in prediction1:
         if i[0] > i[1]:
             if i[0] > i[2]:
-                tally.append(0)
-            else:
                 tally.append(4)
+            else:
+                tally.append(0)
         else:
             if i[1] > i[2]:
                 tally.append(2)
             else:
-                tally.append(4)
+                tally.append(0)
 
     try:
         print(tally)
